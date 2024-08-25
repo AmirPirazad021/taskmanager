@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Taskmanaer</string>
+    <string name="enter_title">تایتل انتخاب کنید</string>
+    <string name="enter_desc">توضیحات رو وارد کنید</string>
+    <string name="choose_deadline">تاریخ یادآوری</string>
+    <string name="save">ذخیره</string>
+    <string name="add_task">اضافه شدن عملیات جدید</string>
+    <string name="error_desc">توضیحات نباید خالی باشد</string>
+    <string name="error_title">تایتل نباید خالی باشد</string>
+    <string name="error_deadline">ددلاین باید مشخص شود</string>
+    <string name="toolbar_name">مدیریت تسک ها</string>
+</resources>

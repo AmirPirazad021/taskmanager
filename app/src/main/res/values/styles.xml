@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BottomSheetLightOption" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rectangle_bg_16dp_white</item>
+    </style>
+
+    <style name="BottomSheetDialogLightOption" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="bottomSheetStyle">@style/BottomSheetLightOption</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+</resources>
