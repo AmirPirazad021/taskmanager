@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -29,25 +30,28 @@ class TasksViewModel @Inject constructor(
 
     val submitNewTask: MutableLiveData<Resource<Unit>> = MutableLiveData()
 
-    private val title = MutableStateFlow<String?>(null)
+    private val _title = MutableStateFlow<String?>(null)
+    val title get() = _title.asStateFlow()
 
-    private val description = MutableStateFlow<String?>(null)
+    private val _description = MutableStateFlow<String?>(null)
+    val description get() = _description.asStateFlow()
 
-    private val deadline = MutableStateFlow<String?>(null)
+    private val _deadline = MutableStateFlow<String?>(null)
+    val deadline get() = _deadline.asStateFlow()
 
     private val _messageId = MutableSharedFlow<Int?>()
     val messageId get() = _messageId.asSharedFlow()
 
     fun updateTitle(newTitle: String) {
-        title.value = newTitle
+        _title.value = newTitle
     }
 
     fun updateDesc(newDesc: String) {
-        description.value = newDesc
+        _description.value = newDesc
     }
 
     fun updateDeadline(newDeadline: String) {
-        deadline.value = newDeadline
+        _deadline.value = newDeadline
     }
 
     init {
@@ -58,16 +62,12 @@ class TasksViewModel @Inject constructor(
         deleteTaskUseCase(task)
     }
 
-    fun upsertTask() = viewModelScope.launch {
+    fun upsertTask(taskModel: TasksModel, isUpdate: Boolean) = viewModelScope.launch {
         title.value?.let { title ->
             description.value?.let { description ->
                 deadline.value?.let { deadline ->
                     submitNewTask.postValue(Resource.Loading())
-                    val response = upsertTaskUseCase(
-                        TasksModel(
-                            title = title, description = description, deadLine = deadline.toLong()
-                        )
-                    )
+                    val response = upsertTaskUseCase(taskModel)
                     submitNewTask.postValue(Resource.Success(response))
                 } ?: kotlin.run {
                     _messageId.emit(R.string.error_deadline)

@@ -44,14 +44,18 @@ class MainActivity : AppCompatActivity() {
 
         binding?.apply {
             fabAddTask.setOnClickListener {
-                UpsertTaskBottomSheet().show(supportFragmentManager, "")
+                UpsertTaskBottomSheet.createInstance().show(supportFragmentManager, "")
             }
         }
 
-        tasksAdapter.setOnClickDeleteItemListener(object :
-            TasksListAdapter.OnClickItemDeleteListener {
+        tasksAdapter.setOnItemClickListener(object :
+            TasksListAdapter.OnClickItemListener {
             override fun onClickDeleteItem(tasksModel: TasksModel) {
                 viewModel.deleteTask(tasksModel)
+            }
+
+            override fun onClickEditItem(tasksModel: TasksModel) {
+                UpsertTaskBottomSheet.createInstance(tasksModel).show(supportFragmentManager, "")
             }
 
         })

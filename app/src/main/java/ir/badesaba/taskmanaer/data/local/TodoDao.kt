@@ -1,4 +1,4 @@
-package ir.badesaba.taskmanaer.data.todo
+package ir.badesaba.taskmanaer.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -19,14 +19,6 @@ interface TodoDao {
 
     @Delete
     suspend fun deleteTask(vararg todoEntity: TasksEntity)
-
-    @Transaction
-    suspend fun combineUpsert(
-        todoEntity: TasksEntity
-    ) {
-        upsertTask(todoEntity)
-        getTaskList()
-    }
 
     @Transaction
     suspend fun combineDelete(

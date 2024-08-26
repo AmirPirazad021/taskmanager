@@ -4,7 +4,7 @@ fragmentKtx = "1.8.2"
 gson = "2.8.9"
 hiltAndroid = "2.50"
 hiltCompiler = "1.1.0"
-kotlin = "1.9.0"
+kotlin = "1.9.23"
 lifecycleRuntimeKtxVersion = "2.4.0"
 lifecycleViewmodelKtx = "2.4.1"
 loggingInterceptor = "4.5.0"
@@ -52,3 +52,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

@@ -16,7 +16,7 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
         binding.root
     )
 
-    private var onClickItemDeleteListener: OnClickItemDeleteListener? = null
+    private var onClickItemListener: OnClickItemListener? = null
 
     private val diffCallback = object : DiffUtil.ItemCallback<TasksModel>() {
         override fun areItemsTheSame(
@@ -59,17 +59,21 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
             tvDescription.text = task.description
             tvDeadline.text = task.deadLine.toString()
             ivDelete.setOnClickListener {
-                onClickItemDeleteListener?.onClickDeleteItem(task)
+                onClickItemListener?.onClickDeleteItem(task)
+            }
+            ivEdit.setOnClickListener {
+                onClickItemListener?.onClickEditItem(task)
             }
         }
     }
 
-    interface OnClickItemDeleteListener {
+    interface OnClickItemListener {
         fun onClickDeleteItem(tasksModel: TasksModel)
+        fun onClickEditItem(tasksModel: TasksModel)
     }
 
-    fun setOnClickDeleteItemListener(onClickListener: OnClickItemDeleteListener?) {
-        this.onClickItemDeleteListener = onClickListener
+    fun setOnItemClickListener(onClickListener: OnClickItemListener?) {
+        this.onClickItemListener = onClickListener
     }
 
 }

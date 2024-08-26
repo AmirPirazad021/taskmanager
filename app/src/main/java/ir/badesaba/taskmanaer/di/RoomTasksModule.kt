@@ -8,9 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ir.badesaba.taskmanaer.data.database.MyDatabase
-import ir.badesaba.taskmanaer.data.todo.TodoDao
-import ir.badesaba.taskmanaer.data.todo.TodoRepositoryImpl
+import ir.badesaba.taskmanaer.data.local.MyDatabase
+import ir.badesaba.taskmanaer.data.local.TodoDao
+import ir.badesaba.taskmanaer.data.TodoRepositoryImpl
 import ir.badesaba.taskmanaer.domain.tasks.TaskRepository
 import javax.inject.Singleton
 
