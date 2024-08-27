@@ -14,13 +14,14 @@ import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ir.badesaba.taskmanaer.CHANNEL
-import ir.badesaba.taskmanaer.R
+import ir.badesaba.taskmanaer.R;
 import ir.badesaba.taskmanaer.domain.tasks.TasksModel
 import ir.badesaba.taskmanaer.domain.tasks.use_case.UpsertTaskUseCase
+import ir.badesaba.taskmanaer.utils.MediaPlayerManager
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-const val DONE = "DONE"
+const val OK = "OK"
 
 @AndroidEntryPoint
 class ReminderReceiver : BroadcastReceiver() {
@@ -37,22 +38,25 @@ class ReminderReceiver : BroadcastReceiver() {
         val reminderJson = intent.getStringExtra(REMINDER)
         val reminder = Gson().fromJson(reminderJson, TasksModel::class.java)
 
+        val notificationManager = NotificationManagerCompat.from(context)
+
         val doneIntent = Intent(context, ReminderReceiver::class.java).apply {
             putExtra(REMINDER, reminderJson)
-            action = DONE
+            action = OK
         }
         val donePendingIntent = PendingIntent.getBroadcast(
             context, reminder.deadLine.toInt(), doneIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
         when (intent.action) {
-            DONE -> {
+            OK -> {
+                MediaPlayerManager.stopAndReleaseAll()
+                // Cancel the notification
+                notificationManager.cancel(1)
+
+                // Update the task using the use case
                 runBlocking { updateUseCase.invoke(reminder) }
-                if (mediaPlayer != null) {
-                    mediaPlayer?.stop()
-                    mediaPlayer?.release()
-                    mediaPlayer = null
-                }
+
                 cancelAlarm(context, reminder)
             }
 
@@ -66,27 +70,31 @@ class ReminderReceiver : BroadcastReceiver() {
                         val notification = NotificationCompat.Builder(context, CHANNEL)
                             .setSmallIcon(R.drawable.ic_timer)
                             .setContentTitle("Task Reminder")
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setContentText(reminder.title.plus(" ${reminder.description}"))
                             .addAction(R.drawable.ic_add, "متوجه شدم", donePendingIntent)
                             .build()
-                        NotificationManagerCompat.from(context)
-                            .notify(1, notification)
+                        notificationManager.notify(1, notification)
                     }
                 } else {
                     val notification = NotificationCompat.Builder(context, CHANNEL)
                         .setSmallIcon(R.drawable.ic_timer)
                         .setContentTitle("Task Reminder")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentText(reminder.title.plus(" ${reminder.description}"))
                         .addAction(R.drawable.ic_add, "متوجه شدم", donePendingIntent)
                         .build()
 
-                    NotificationManagerCompat.from(context)
-                        .notify(1, notification)
+                    notificationManager.notify(1, notification)
                 }
+
                 mediaPlayer?.setOnCompletionListener {
                     mediaPlayer?.release()
                 }
-                mediaPlayer?.start()
+                mediaPlayer?.apply {
+                    MediaPlayerManager.addMediaPlayer(this)
+                    start()
+                }
             }
         }
     }

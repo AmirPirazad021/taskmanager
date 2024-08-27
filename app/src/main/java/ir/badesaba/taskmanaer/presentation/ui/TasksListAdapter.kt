@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ir.badesaba.taskmanaer.R
+import ir.badesaba.taskmanaer.R;
 import ir.badesaba.taskmanaer.databinding.ItemTaskBinding
 import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.utils.Utils
 
 class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(
@@ -57,7 +58,7 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
             val task = tasksList[position]
             tvTitle.text = task.title
             tvDescription.text = task.description
-            tvDeadline.text = task.deadLine.toString()
+            tvDeadline.text = Utils.convertToDate(task.deadLine)
             ivDelete.setOnClickListener {
                 onClickItemListener?.onClickDeleteItem(task)
             }

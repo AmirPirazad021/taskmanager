@@ -12,7 +12,7 @@ import ir.badesaba.taskmanaer.databinding.ActivityMainBinding
 import ir.badesaba.taskmanaer.domain.tasks.TasksModel
 import ir.badesaba.taskmanaer.presentation.viewmodel.TasksViewModel
 import ir.badesaba.taskmanaer.utils.Resource
-import ir.badesaba.taskmanaer.utils.initRecyclerView
+import ir.badesaba.taskmanaer.utils.Utils.initRecyclerView
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

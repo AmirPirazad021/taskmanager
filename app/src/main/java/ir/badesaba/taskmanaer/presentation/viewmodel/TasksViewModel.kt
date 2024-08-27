@@ -10,6 +10,7 @@ import ir.badesaba.taskmanaer.domain.tasks.use_case.DeleteTaskUseCase
 import ir.badesaba.taskmanaer.domain.tasks.use_case.ListTasksUseCase
 import ir.badesaba.taskmanaer.domain.tasks.use_case.UpsertTaskUseCase
 import ir.badesaba.taskmanaer.utils.Resource
+import ir.badesaba.taskmanaer.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +37,7 @@ class TasksViewModel @Inject constructor(
     private val _description = MutableStateFlow<String?>(null)
     val description get() = _description.asStateFlow()
 
-    private val _deadline = MutableStateFlow<String?>(null)
+    private val _deadline = MutableStateFlow<Long?>(null)
     val deadline get() = _deadline.asStateFlow()
 
     private val _messageId = MutableSharedFlow<Int?>()
@@ -51,7 +52,16 @@ class TasksViewModel @Inject constructor(
     }
 
     fun updateDeadline(newDeadline: String) {
-        _deadline.value = newDeadline
+        val arrDateTime = newDeadline.split(" ")
+        val arrDate = arrDateTime[0].split("/")
+        val arrTime = arrDateTime[1].split(":")
+        _deadline.value = Utils.convertDateToTimestamp(
+            arrDate[0].toInt(),
+            arrDate[1].toInt(),
+            arrDate[2].toInt(),
+            arrTime[0].toInt(),
+            arrTime[1].toInt()
+        )
     }
 
     init {
@@ -62,7 +72,7 @@ class TasksViewModel @Inject constructor(
         deleteTaskUseCase(task)
     }
 
-    fun upsertTask(taskModel: TasksModel, isUpdate: Boolean) = viewModelScope.launch {
+    fun upsertTask(taskModel: TasksModel) = viewModelScope.launch {
         title.value?.let { title ->
             description.value?.let { description ->
                 deadline.value?.let { deadline ->

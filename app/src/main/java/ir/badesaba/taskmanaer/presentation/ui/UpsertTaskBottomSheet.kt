@@ -1,11 +1,16 @@
 package ir.badesaba.taskmanaer.presentation.ui
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -15,14 +20,19 @@ import ir.badesaba.taskmanaer.databinding.UpsertTaskBinding
 import ir.badesaba.taskmanaer.domain.tasks.TasksModel
 import ir.badesaba.taskmanaer.presentation.setUpAlarm
 import ir.badesaba.taskmanaer.presentation.viewmodel.TasksViewModel
+import ir.badesaba.taskmanaer.utils.Utils
 
 @SuppressLint("SetTextI18n")
-class UpsertTaskBottomSheet : BottomSheetDialogFragment() {
+class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private val taskViewModel: TasksViewModel by activityViewModels()
 
     private var _binding: UpsertTaskBinding? = null
     private val binding get() = _binding!!
+    private var time = ""
+    private var date = ""
+    private var dateTime = ""
 
 
     @Suppress("DEPRECATION")
@@ -65,21 +75,33 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment() {
             tasksModel?.let { tasksModel ->
                 edTitle.setText(tasksModel.title)
                 etDescription.setText(tasksModel.description)
+                datePicker.setText(Utils.convertToDate(tasksModel.deadLine))
+            }
+            datePicker.setOnClickListener {
+                val now = Calendar.getInstance()
+                val dpd = DatePickerDialog(
+                    requireActivity(),
+                    this@UpsertTaskBottomSheet,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+                )
+                dpd.show()
             }
             saveTask.setOnClickListener {
                 taskViewModel.apply {
                     val nowTime = (System.currentTimeMillis() + 1000 * 30).toString()
                     taskViewModel.updateTitle(edTitle.text.toString())
                     taskViewModel.updateDesc(etDescription.text.toString())
-                    taskViewModel.updateDeadline(nowTime)
+                    taskViewModel.updateDeadline(dateTime)
                     Log.e("TAGGGGG", "onViewCreated: $nowTime")
                     val model = TasksModel(
                         id = tasksModel?.id ?: 0,
-                        title = title.value!!,
-                        description = description.value!!,
-                        deadLine = deadline.value?.toLong()!!
+                        title = title.value ?: "",
+                        description = description.value ?: "",
+                        deadLine = deadline.value ?: 0L
                     )
-                    taskViewModel.upsertTask(model, false)
+                    taskViewModel.upsertTask(model)
                     setUpAlarm(requireActivity(), model)
                     dismiss()
                 }
@@ -92,4 +114,26 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onDateSet(p0: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        date = "$year/${monthOfYear + 1}/$dayOfMonth"
+
+        val now = Calendar.getInstance()
+        val dpd = TimePickerDialog(
+            requireActivity(),
+            this,  // Pass your TimePickerDialog.OnTimeSetListener implementation here
+            now.get(Calendar.HOUR_OF_DAY),  // Correct way to get the current hour
+            now.get(Calendar.MINUTE),  // Correct way to get the current minute
+            true  // Whether to use 24-hour mode
+        )
+        dpd.show()
+
+    }
+
+    override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
+        time = "$hourOfDay:$minute"
+        dateTime = date.plus(" ").plus(time)
+        binding.datePicker.text = dateTime.replace(" ", "  ")
+    }
+
 }
