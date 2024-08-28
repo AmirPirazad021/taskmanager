@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ir.badesaba.taskmanaer.R;
 import ir.badesaba.taskmanaer.databinding.ItemTaskBinding
-import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.data.TasksDto
 import ir.badesaba.taskmanaer.utils.Utils
 
 class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>() {
@@ -19,15 +19,15 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
 
     private var onClickItemListener: OnClickItemListener? = null
 
-    private val diffCallback = object : DiffUtil.ItemCallback<TasksModel>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<TasksDto>() {
         override fun areItemsTheSame(
-            oldItem: TasksModel, newItem: TasksModel
+            oldItem: TasksDto, newItem: TasksDto
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: TasksModel, newItem: TasksModel
+            oldItem: TasksDto, newItem: TasksDto
         ): Boolean {
             return oldItem == newItem
         }
@@ -35,7 +35,7 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    var tasksList: List<TasksModel>
+    var tasksList: List<TasksDto>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
@@ -69,8 +69,8 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.TaskViewHolder>()
     }
 
     interface OnClickItemListener {
-        fun onClickDeleteItem(tasksModel: TasksModel)
-        fun onClickEditItem(tasksModel: TasksModel)
+        fun onClickDeleteItem(tasksModel: TasksDto)
+        fun onClickEditItem(tasksModel: TasksDto)
     }
 
     fun setOnItemClickListener(onClickListener: OnClickItemListener?) {

@@ -1,12 +1,12 @@
 package ir.badesaba.taskmanaer.mapper
 
-import ir.badesaba.taskmanaer.data.local.TasksEntity
-import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.domain.TasksEntity
+import ir.badesaba.taskmanaer.data.TasksDto
 
-fun TasksModel.toTasksEntity() = TasksEntity(
+fun TasksDto.toTasksEntity() = TasksEntity(
     id = id, title = title, description = description, deadLine = deadLine, updateAt = updateAt
 )
 
-fun TasksEntity.toTaskModel() = TasksModel(
+fun TasksEntity.toTaskModel() = TasksDto(
     id = id, title = title, description = description, deadLine = deadLine, updateAt = updateAt
 )

@@ -15,7 +15,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ir.badesaba.taskmanaer.CHANNEL
 import ir.badesaba.taskmanaer.R;
-import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.data.TasksDto
 import ir.badesaba.taskmanaer.domain.tasks.use_case.UpsertTaskUseCase
 import ir.badesaba.taskmanaer.utils.MediaPlayerManager
 import kotlinx.coroutines.runBlocking
@@ -36,7 +36,7 @@ class ReminderReceiver : BroadcastReceiver() {
         mediaPlayer = MediaPlayer.create(context, R.raw.alarm_music)
 
         val reminderJson = intent.getStringExtra(REMINDER)
-        val reminder = Gson().fromJson(reminderJson, TasksModel::class.java)
+        val reminder = Gson().fromJson(reminderJson, TasksDto::class.java)
 
         val notificationManager = NotificationManagerCompat.from(context)
 

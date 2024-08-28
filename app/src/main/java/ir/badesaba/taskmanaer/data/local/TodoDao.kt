@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import ir.badesaba.taskmanaer.domain.TasksEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,15 +18,17 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertTask(vararg todoEntity: TasksEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(vararg todoEntity: TasksEntity)
+
     @Delete
     suspend fun deleteTask(vararg todoEntity: TasksEntity)
 
     @Transaction
-    suspend fun combineDelete(
-        todoEntity: TasksEntity
+    suspend fun initTasks(
+        currencies: List<TasksEntity>,
     ) {
-        upsertTask(todoEntity)
-        getTaskList()
+        insertAll(*currencies.toTypedArray())
     }
 
 }

@@ -17,7 +17,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ir.badesaba.taskmanaer.R
 import ir.badesaba.taskmanaer.databinding.UpsertTaskBinding
-import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.data.TasksDto
 import ir.badesaba.taskmanaer.presentation.setUpAlarm
 import ir.badesaba.taskmanaer.presentation.viewmodel.TasksViewModel
 import ir.badesaba.taskmanaer.utils.Utils
@@ -36,7 +36,7 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDa
 
 
     @Suppress("DEPRECATION")
-    private val tasksModel by lazy<TasksModel?> {
+    private val tasksModel by lazy<TasksDto?> {
         requireArguments().getParcelable(
             TASK_ITEM
         )
@@ -45,7 +45,7 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDa
     companion object {
         private const val TASK_ITEM = "TASK_ITEM"
         fun createInstance(
-            taskModelItem: TasksModel? = null,
+            taskModelItem: TasksDto? = null,
         ): UpsertTaskBottomSheet {
             val bundle = bundleOf(
                 TASK_ITEM to taskModelItem,
@@ -95,7 +95,7 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDa
                     taskViewModel.updateDesc(etDescription.text.toString())
                     taskViewModel.updateDeadline(dateTime)
                     Log.e("TAGGGGG", "onViewCreated: $nowTime")
-                    val model = TasksModel(
+                    val model = TasksDto(
                         id = tasksModel?.id ?: 0,
                         title = title.value ?: "",
                         description = description.value ?: "",

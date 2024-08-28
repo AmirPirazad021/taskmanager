@@ -5,11 +5,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.google.gson.Gson
-import ir.badesaba.taskmanaer.domain.tasks.TasksModel
+import ir.badesaba.taskmanaer.data.TasksDto
 
 const val REMINDER = "REMINDER"
 
-fun setUpAlarm(context: Context, reminder: TasksModel) {
+fun setUpAlarm(context: Context, reminder: TasksDto) {
     val intent = Intent(context, ReminderReceiver::class.java).apply {
         putExtra(REMINDER, Gson().toJson(reminder))
     }
@@ -25,7 +25,7 @@ fun setUpAlarm(context: Context, reminder: TasksModel) {
     }
 }
 
-fun cancelAlarm(context: Context, reminder: TasksModel) {
+fun cancelAlarm(context: Context, reminder: TasksDto) {
     val intent = Intent(context, ReminderReceiver::class.java).apply {
         putExtra(REMINDER, Gson().toJson(reminder))
     }

@@ -1,4 +1,4 @@
-package ir.badesaba.taskmanaer.data.local
+package ir.badesaba.taskmanaer.domain
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

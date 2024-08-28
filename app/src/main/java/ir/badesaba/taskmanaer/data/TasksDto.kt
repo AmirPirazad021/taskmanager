@@ -1,4 +1,4 @@
-package ir.badesaba.taskmanaer.domain.tasks
+package ir.badesaba.taskmanaer.data
 
 import android.os.Parcelable
 import androidx.annotation.Keep
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class TasksModel(
+data class TasksDto(
     @SerializedName("id")
     val id: Int = 0,
     @SerializedName("title")
