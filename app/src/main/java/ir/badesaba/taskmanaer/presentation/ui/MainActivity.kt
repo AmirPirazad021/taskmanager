@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Error<*> -> {
                     Log.e("TAGGGGG", "observeTasks: Error")
                     binding?.apply {
-                        errorMessage.text = (it.errorType as ApiError).let { it.message.plus(" : خطا ").plus(it.statusCode)}
+                        errorMessage.text = (it.errorType as ApiError).let {
+                            it.message.plus(getString(R.string.text_error)).plus(it.statusCode)
+                        }
                         vsTaskList.displayedChild = UiFlag.RETRY.value
                     }
                 }

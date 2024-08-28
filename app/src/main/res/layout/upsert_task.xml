@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:paddingHorizontal="16dp"
     tools:context=".presentation.ui.MainActivity">
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="24dp"/>
+        android:layout_height="24dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTitle"
@@ -27,9 +27,10 @@
             android:id="@+id/edTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/iransans_medium"
             android:hint="@string/enter_title"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,9 +51,10 @@
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/iransans_medium"
             android:hint="@string/enter_desc"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,10 +67,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_r8"
+        android:fontFamily="@font/iransans_medium"
         android:paddingHorizontal="16dp"
         android:paddingVertical="16dp"
         android:text="@string/choose_deadline"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
 
     <Space
         android:layout_width="wrap_content"
@@ -78,13 +81,14 @@
         android:id="@+id/saveTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/iransans_medium"
         android:paddingVertical="12dp"
         android:text="@string/save"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:backgroundTint="@color/black" />
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="24dp"/>
+        android:layout_height="24dp" />
 
 </LinearLayout>

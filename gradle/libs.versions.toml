@@ -50,6 +50,9 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 library-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "libraryNoOp" }
 library = { module = "com.github.chuckerteam.chucker:library", version.ref = "library" }
+datastores-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorelib" }
+datastores_preferences_core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorelib" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastorelib" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

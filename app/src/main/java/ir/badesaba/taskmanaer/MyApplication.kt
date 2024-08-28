@@ -31,7 +31,6 @@ class MyApplication : Application() {
                 this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
         }
-
     }
 
 }
