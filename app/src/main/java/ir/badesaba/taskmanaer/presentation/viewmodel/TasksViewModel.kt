@@ -42,12 +42,12 @@ class TasksViewModel @Inject constructor(
     private val _taskState = MutableLiveData<Resource<List<TasksDto>>>(Resource.Loading)
     val taskState: LiveData<Resource<List<TasksDto>>> = _taskState
 
-    val submitNewTask: MutableLiveData<Resource<Unit>> = MutableLiveData()
+    val submitNewTask: MutableLiveData<Resource<TasksDto>> = MutableLiveData()
 
-    private val _title = MutableStateFlow<String?>(null)
+    private val _title = MutableStateFlow<String>("")
     val title get() = _title.asStateFlow()
 
-    private val _description = MutableStateFlow<String?>(null)
+    private val _description = MutableStateFlow<String>("")
     val description get() = _description.asStateFlow()
 
     private val _deadline = MutableStateFlow<Long?>(null)
@@ -65,6 +65,10 @@ class TasksViewModel @Inject constructor(
     }
 
     fun updateDeadline(newDeadline: String) {
+        if (newDeadline.isEmpty()) {
+            _deadline.value = null
+            return
+        }
         val arrDateTime = newDeadline.split(" ")
         val arrDate = arrDateTime[0].split("/")
         val arrTime = arrDateTime[1].split(":")
@@ -86,20 +90,27 @@ class TasksViewModel @Inject constructor(
     }
 
     fun upsertTask(taskModel: TasksDto) = viewModelScope.launch {
-        title.value?.let { title ->
-            description.value?.let { description ->
-                deadline.value?.let { deadline ->
-                    submitNewTask.postValue(Resource.Loading)
-                    val response = upsertTaskUseCase(taskModel)
-                    submitNewTask.postValue(Resource.Success(response))
-                } ?: kotlin.run {
-                    _messageId.emit(R.string.error_deadline)
-                }
-            } ?: kotlin.run {
-                _messageId.emit(R.string.error_desc)
+        when {
+            title.value.isEmpty() -> {
+                _messageId.emit(R.string.error_title)
+                return@launch
             }
-        } ?: kotlin.run {
-            _messageId.emit(R.string.error_title)
+
+            description.value.isEmpty() -> {
+                _messageId.emit(R.string.error_desc)
+                return@launch
+            }
+
+            deadline.value == null -> {
+                _messageId.emit(R.string.error_deadline)
+                return@launch
+            }
+
+            else -> {
+                submitNewTask.postValue(Resource.Loading)
+                upsertTaskUseCase(taskModel)
+                submitNewTask.postValue(Resource.Success(taskModel))
+            }
         }
     }
 

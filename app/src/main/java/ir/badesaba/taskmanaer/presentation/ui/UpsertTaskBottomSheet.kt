@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +15,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ir.badesaba.taskmanaer.R
-import ir.badesaba.taskmanaer.databinding.UpsertTaskBinding
 import ir.badesaba.taskmanaer.data.TasksDto
+import ir.badesaba.taskmanaer.databinding.UpsertTaskBinding
 import ir.badesaba.taskmanaer.presentation.setUpAlarm
 import ir.badesaba.taskmanaer.presentation.viewmodel.TasksViewModel
+import ir.badesaba.taskmanaer.utils.Resource
 import ir.badesaba.taskmanaer.utils.Utils
 
 @SuppressLint("SetTextI18n")
@@ -88,13 +88,23 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDa
                 )
                 dpd.show()
             }
+
+            taskViewModel.submitNewTask.observe(viewLifecycleOwner) {
+                when(it) {
+                    is Resource.Error<*> -> {}
+                    Resource.Loading -> {}
+                    is Resource.Success -> {
+                        setUpAlarm(requireActivity(), it.data)
+                        dismiss()
+                    }
+                }
+            }
+
             saveTask.setOnClickListener {
                 taskViewModel.apply {
-                    val nowTime = (System.currentTimeMillis() + 1000 * 30).toString()
                     taskViewModel.updateTitle(edTitle.text.toString())
                     taskViewModel.updateDesc(etDescription.text.toString())
                     taskViewModel.updateDeadline(dateTime)
-                    Log.e("TAGGGGG", "onViewCreated: $nowTime")
                     val model = TasksDto(
                         id = tasksModel?.id ?: 0,
                         title = title.value ?: "",
@@ -102,8 +112,6 @@ class UpsertTaskBottomSheet : BottomSheetDialogFragment(), DatePickerDialog.OnDa
                         deadLine = deadline.value ?: 0L
                     )
                     taskViewModel.upsertTask(model)
-                    setUpAlarm(requireActivity(), model)
-                    dismiss()
                 }
             }
         }

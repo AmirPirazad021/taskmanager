@@ -2,11 +2,13 @@ package ir.badesaba.taskmanaer.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ir.badesaba.taskmanaer.R
 import ir.badesaba.taskmanaer.data.TasksDto
@@ -16,6 +18,7 @@ import ir.badesaba.taskmanaer.presentation.viewmodel.TasksViewModel
 import ir.badesaba.taskmanaer.utils.Resource
 import ir.badesaba.taskmanaer.utils.Utils.initRecyclerView
 import ir.badesaba.taskmanaer.utils.enums.UiFlag
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -70,6 +73,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeTasks() {
+        lifecycleScope.launch {
+            viewModel.messageId.collect {
+                Toast.makeText(
+                    this@MainActivity,
+                    it?.let { it1 -> resources.getString(it1) },
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+
         viewModel.taskState.observe(this) {
             when (it) {
                 is Resource.Error<*> -> {
