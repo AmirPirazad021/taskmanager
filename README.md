@@ -2,7 +2,7 @@ This is a TaskManager application designed to help you efficiently manage your t
 
 Key Features:
 
-Architecture : using MVVM
+Architecture : using MVVM.
 Data Fetching: The app fetches data from the server using Retrofit and OkHttp.
 Local Storage: Room is used as the local database for storing tasks.
 Data Persistence: DataStore is utilized to manage and save data fetched from the server when the app is launched for the first time.
