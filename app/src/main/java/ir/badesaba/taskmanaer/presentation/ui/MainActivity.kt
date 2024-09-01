@@ -1,16 +1,22 @@
 package ir.badesaba.taskmanaer.presentation.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ir.badesaba.taskmanaer.R
+import ir.badesaba.taskmanaer.REQUEST_NOTIFICATION_PERMISSIONS
 import ir.badesaba.taskmanaer.data.TasksDto
 import ir.badesaba.taskmanaer.databinding.ActivityMainBinding
 import ir.badesaba.taskmanaer.di.ApiError
@@ -40,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        grantNotificationPermission()
 
         tasksAdapter = TasksListAdapter()
         binding?.rvTasks?.initRecyclerView(this, tasksAdapter, false)
@@ -113,4 +121,18 @@ class MainActivity : AppCompatActivity() {
         tasksAdapter.tasksList = tasks
     }
 
+
+    private fun grantNotificationPermission() {
+        if (Build.VERSION.SDK_INT < 33) return
+        val notification = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (notification != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                REQUEST_NOTIFICATION_PERMISSIONS
+            )
+        }
+    }
 }

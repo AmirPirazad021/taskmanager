@@ -11,6 +11,7 @@ import java.lang.ref.WeakReference
 
 const val CHANNEL = "channel"
 const val NAME = "name"
+const val REQUEST_NOTIFICATION_PERMISSIONS = 1021
 
 @HiltAndroidApp
 class MyApplication : Application() {
